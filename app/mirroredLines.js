@@ -11,7 +11,15 @@ class MirroredLines {
   constructor(options) {
     Object.assign(this, options);
     this.padding = options.padding || 0;
+    this.restraintPadding = options.restraintPadding || 0;
     this.sortLinePoints = options.sortLinePoints || false;
+  }
+
+  containPoint(point) {
+    point = point.slice(0);
+    point[0] = N.contain(point[0], this.width - this.restraintPadding, this.restraintPadding);
+    point[1] = N.contain(point[1], this.height - this.restraintPadding, this.restraintPadding);
+    return point;
   }
 
   clonePoints(points) {
@@ -52,7 +60,11 @@ class MirroredLines {
   }
 
   makeMirroredShape(line) {
-    return [...line, ...this.xMirrorPoints(line).reverse()];
+    line = [...line, ...this.xMirrorPoints(line).reverse()];
+    if (this.restrainPoints) {
+      line = line.map(point => this.containPoint(point));
+    }
+    return line;
   }
 
   randomPoint() {

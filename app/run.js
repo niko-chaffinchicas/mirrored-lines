@@ -25,11 +25,13 @@ function drawIt() {
   let mp = new MirroredLines({
     width: canvas.width,
     height: canvas.height,
-    padding: 100,
-    sortLinePoints: false
+    padding: canvas.width * 0.2,
+    sortLinePoints: false,
+    restrainPoints: true,
+    restraintPadding: canvas.width * 0.05,
   });
 
-  let jitterAmount = N.randomInt(220, 180);
+  let jitterAmount = N.randomInt(300, 180);
   let numberOfTweens = N.randomInt(100, 60);
   let numberOfPoints = N.randomInt(14, 8);
   let timestamp = Date.now();
@@ -60,6 +62,8 @@ function drawIt() {
   });
 
   canvas.writePng(imagePath(`${timestamp}_bg.png`));
+
+  drawIt();
 }
 
 drawIt();

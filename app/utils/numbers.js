@@ -102,7 +102,7 @@ module.exports = {
    * @param {Number} max - The max value for the range
    * @param {Number} [min=0] - The min value for the range
    */
-  contain: function(n, min, max) {
+  contain: function(n, max, min) {
     [max, min] = this._maxMinParamCheck(max, min);
     if (n > max) {
       return max;
