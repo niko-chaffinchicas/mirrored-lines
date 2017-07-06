@@ -1,0 +1,27 @@
+{
+  "name": "mirrored-lines",
+  "version": "0.0.1",
+  "description": "A Node utility for generating interesting series of interlaced lines.",
+  "main": "app/mirroredLines.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikochaffin/mirrored-lines.git"
+  },
+  "author": "Niko Chaffin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nikochaffin/mirrored-lines/issues"
+  },
+  "homepage": "https://github.com/nikochaffin/mirrored-lines#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "canvas": "^1.6.5",
+  },
+  "devDependencies": {
+    "jsdoc": "^3.4.3",
+    "imageoptim": "^0.4.2"
+  }
+}
