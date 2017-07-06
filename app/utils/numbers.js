@@ -142,5 +142,25 @@ module.exports = {
     return Array.apply(null, {length: n}).map((_, i) => {
       return end + (diff / (n+1) * (i+1));
     });
+  },
+
+  /**
+   * @function range
+   * @param {Number[]} vals - Any number of values, all of which should be
+   * numbers
+   * @returns {Number[]} An array with two values: the `max` and `min` value
+   * out of the vals passed.
+   */
+  range: function(vals) {
+    let high = vals[0];
+    let low = vals[0];
+    for (var i = 0; i < vals.length; i++) {
+      if (vals[i] > high) {
+        high = vals[i];
+      } else if (vals[i] < low) {
+        low = vals[i];
+      }
+    }
+    return [high, low];
   }
 };

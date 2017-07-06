@@ -56,6 +56,18 @@ function drawIt() {
   });
   // Insert the distrubutedLines between the start and end lines
   lines.splice(1, 0, ...distrubutedLines.reverse());
+
+  // Find the point with the lowest y value
+  let yVals = [].concat(...lines).map(point => point[1]);
+  let [highY, lowY] = N.range(yVals);
+  let diffY = ((canvas.height - (highY - lowY)) / 2) - lowY;
+  lines = lines.map((line) => {
+    return line.map((point) => {
+      point[1] += diffY;
+      return point;
+    });
+  });
+
   // Draw all the lines!
   lines.forEach((line) => {
     canvas.strokeLine(line, strokeColor);
