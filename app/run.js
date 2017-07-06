@@ -13,6 +13,14 @@ function imagePath(filename) {
 // Globals for the mirrored line generation
 let strokeColor = "rgba(225, 255, 255, 0.3)";
 
+function getStrokeColor(i, max) {
+  let r = Math.round(155 + N.distribute(max, 0, 100)[i]);
+  let g = Math.round(150);
+  let b = Math.round(255 - + N.distribute(max, 0, 100)[i]);
+  let a = 0.3;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
 function drawIt() {
   let mp = new MirroredLines({
     width: canvas.width,
@@ -45,7 +53,7 @@ function drawIt() {
     return mp.makeMirroredShape(line);
   });
   // Insert the distrubutedLines between the start and end lines
-  lines.splice(1, 0, ...distrubutedLines);
+  lines.splice(1, 0, ...distrubutedLines.reverse());
   // Draw all the lines!
   lines.forEach((line) => {
     canvas.strokeLine(line, strokeColor);
