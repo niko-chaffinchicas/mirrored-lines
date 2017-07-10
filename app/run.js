@@ -1,4 +1,5 @@
 const path = require('path');
+const uuid = require('uuid/v1');
 
 const MirroredLines = require('./mirroredLines');
 const utils = require('./utils');
@@ -10,18 +11,14 @@ function imagePath(filename) {
   return path.join(__dirname, `../generated_images/${filename}`);
 }
 
-// Globals for the mirrored line generation
-let strokeColor = "rgba(225, 255, 255, 0.3)";
+// blue-grey to maroon, with difference
+let strokeColor = "rgba(230, 134, 140, 0.2)";
 
-function getStrokeColor(i, max) {
-  let r = Math.round(155 + N.distribute(max, 0, 100)[i]);
-  let g = Math.round(150);
-  let b = Math.round(255 - + N.distribute(max, 0, 100)[i]);
-  let a = 0.3;
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
+// yellow to red-purple, with difference
+// let strokeColor = "rgba(30, 80, 203, 0.3)";
 
 function drawIt() {
+  // Initialize the generator with its parameters
   let mp = new MirroredLines({
     width: canvas.width,
     height: canvas.height,
@@ -33,41 +30,22 @@ function drawIt() {
 
   let jitterAmount = N.randomInt(300, 180);
   let numberOfTweens = N.randomInt(100, 60);
-  let numberOfPoints = N.randomInt(14, 8);
-  let timestamp = Date.now();
+  let numberOfPoints = N.randomInt(28, 16);
+  let timestamp = uuid();
 
-  // canvas.clear();
-  canvas.fill("black");
+  canvas.context.globalCompositeOperation = "source-over";
+  canvas.fill("white");
 
-  let lines = [];
   // Generate a random series of points
   let points = mp.randomPoints(numberOfPoints);
 
-  // Make a line out mirroring the points and reversing the order
-  lines.push(mp.makeMirroredShape(points));
+  // Get a new line by jittering the original line, then generate "tween" lines
+  let lines = mp.jitterPointsAndDistribute(points, jitterAmount, numberOfTweens);
+  lines = lines.map(line => mp.makeMirroredShape(line));
 
-  // Jitter the points and add another line
-  let newPoints = mp.jitterPoints(points, jitterAmount);
-  lines.push(mp.makeMirroredShape(newPoints));
+  lines = mp.centerLinesVertically(lines);
 
-  // Spleen lines between the starting lines and ending lines
-  let distrubutedLines = mp.distrubuteLines(points, newPoints, numberOfTweens).map((line) => {
-    return mp.makeMirroredShape(line);
-  });
-  // Insert the distrubutedLines between the start and end lines
-  lines.splice(1, 0, ...distrubutedLines.reverse());
-
-  // Find the point with the lowest y value
-  let yVals = [].concat(...lines).map(point => point[1]);
-  let [highY, lowY] = N.range(yVals);
-  let diffY = ((canvas.height - (highY - lowY)) / 2) - lowY;
-  lines = lines.map((line) => {
-    return line.map((point) => {
-      point[1] += diffY;
-      return point;
-    });
-  });
-
+  canvas.context.globalCompositeOperation = "difference";
   // Draw all the lines!
   lines.forEach((line) => {
     canvas.strokeLine(line, strokeColor);
@@ -75,7 +53,7 @@ function drawIt() {
 
   canvas.writePng(imagePath(`${timestamp}_bg.png`));
 
-  drawIt();
+  // drawIt();
 }
 
 drawIt();

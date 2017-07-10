@@ -51,6 +51,33 @@ class MirroredLines {
     });
   }
 
+  /**
+   * Returns a an array of lines, from the starting lines to the ending,
+   * jittered lines, with `n` number of lines inbetween.
+   */
+  jitterPointsAndDistribute(points, maxDiff, n) {
+    let newPoints = this.jitterPoints(points, maxDiff);
+    let distrubutedLines = this.distrubuteLines(points, newPoints, n);
+    return [points, ...distrubutedLines.reverse(), newPoints];
+  }
+
+  /**
+   * Centers an array of lines vertically within the boundaries of the
+   * originally entered width and height
+   */
+  centerLinesVertically(lines) {
+    // Find the point with the lowest y value
+    let yVals = [].concat(...lines).map(point => point[1]);
+    let [highY, lowY] = N.range(yVals);
+    let diffY = ((this.height - (highY - lowY)) / 2) - lowY;
+    return lines.map((line) => {
+      return line.map((point) => {
+        point[1] += diffY;
+        return point;
+      });
+    });
+  }
+
   xMirrorPoints(points) {
     points = this.clonePoints(points);
     for (let point of points) {
