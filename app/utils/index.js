@@ -7,4 +7,12 @@ module.exports = {
   EnhancedCanvas,
   NumberUtils,
   ArrayUtils,
+
+  isoTimestamp() {
+    return `[${(new Date()).toISOString()}]`;
+  },
+
+  log(...items) {
+    console.log(this.isoTimestamp(), ...items);
+  }
 };

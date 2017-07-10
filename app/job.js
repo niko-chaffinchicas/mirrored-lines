@@ -16,7 +16,7 @@ let strokeColors = [
 
 let envPath = path.join(__dirname, 'env.js');
 if (!fs.existsSync(envPath)) {
-  throw new Error("No env.js file found");
+  throw new Error(`${utils.isoTimestamp()} No env.js file found`);
 }
 
 const _env = require(envPath);
@@ -30,7 +30,7 @@ let twitterClient = new Twitter({
 function postRandomCatsCradle() {
   let timestamp = uuid();
   let name = `cats-cradle-${timestamp}`;
-  console.log(`starting to generate post ${name}...`);
+  utils.log(`starting to generate post ${name}...`);
 
   let bgColor = "white";
   let colorFilter = "difference";
@@ -67,12 +67,12 @@ function postRandomCatsCradle() {
   lines.forEach((line) => {
     canvas.strokeLine(line, color);
   });
-  console.log(`img created ${name}`);
+  utils.log(`img created ${name}`);
 
   let data = canvas.toBuffer();
   twitterClient.post('media/upload', {media:data}, function(error, media) {
     if (error) {
-      return console.log("Error uploading media:", error);
+      return utils.log("Error uploading media:", error);
     }
 
     let status = {
@@ -84,12 +84,12 @@ function postRandomCatsCradle() {
       if (error) {
         return console.log("Error updating status:", error);
       }
-      console.log(`Successfully tweeted ${name}.`);
+      utils.log(`Successfully tweeted ${name}.`);
     });
   });
 }
 
 let job = new CronJob('0 0 */2 * * *', postRandomCatsCradle, null, true, 'America/Los_Angeles');
-console.log("started cron job");
+utils.log("started cron job");
 
 module.exports = postRandomCatsCradle;
