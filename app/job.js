@@ -82,12 +82,12 @@ function postRandomCatsCradle() {
 
     twitterClient.post('statuses/update', status, function(error) {
       if (error) {
-        return console.log("Error updating status:", error);
+        return utils.log("Error updating status:", error);
       }
       utils.log(`Successfully tweeted ${name}.`);
     });
   });
 }
 
-let job = new CronJob('0 0 */2 * * *', postRandomCatsCradle, null, true, 'America/Los_Angeles');
+new CronJob('0 0 */2 * * *', postRandomCatsCradle, null, true, 'America/Los_Angeles');
 utils.log("started cron job");
