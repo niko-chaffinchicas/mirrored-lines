@@ -91,5 +91,3 @@ function postRandomCatsCradle() {
 
 let job = new CronJob('0 0 */2 * * *', postRandomCatsCradle, null, true, 'America/Los_Angeles');
 utils.log("started cron job");
-
-module.exports = postRandomCatsCradle;
