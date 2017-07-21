@@ -1,6 +1,45 @@
 'use strict';
 /** @module NumberUtils */
 
+class BaseConverter {
+  // Converting to/from base 64, adapted for abritrary bases
+  // StackOverflow: http://bit.ly/2tcJdfQ
+  constructor(rixits) {
+    if (Array.isArray(rixits)) {
+      this._rixits = rixits.join("");
+    } else if (typeof rixits === "string") {
+      this._rixits = rixits;
+    }
+    this.base = this._rixits.length;
+  }
+
+  fromNumber(n) {
+    if (isNaN(Number(n)) || n === null || n === Number.POSITIVE_INFINITY) {
+      throw new Error(`The input ${n} is not valid`);
+    } else if (n < 0) {
+      throw new Error(`Can't represent negative numbers like ${n} now`);
+    }
+
+    var rixit; // like 'digit', only in some non-decimal radix
+    var residual = Math.floor(n);
+    var result = '';
+    do {
+      rixit = residual % this.base;
+      result = this._rixits.charAt(rixit) + result;
+      residual = Math.floor(residual / this.base);
+    } while (residual !== 0);
+    return result;
+  }
+
+  toNumber(rixits) {
+      var result = 0;
+      rixits = rixits.split('');
+      for (var e = 0; e < rixits.length; e++) {
+        result = (result * this.base) + this._rixits.indexOf(rixits[e]);
+      }
+      return result;
+    }
+}
 module.exports = {
   /**
    * @ignore
@@ -162,5 +201,21 @@ module.exports = {
       }
     }
     return [high, low];
-  }
+  },
+
+  toExponentInt: function(n) {
+    let nString = n.toString();
+    let nDecimal = n.toString().match(/\./);
+    let e = 0;
+    if (nDecimal) {
+      e = 0 - (nString.length - 1 - nDecimal.index);
+    }
+    n = n.toString().replace('.', '');
+    if (e < 0) {
+      n += `_${Math.abs(e)}`;
+    }
+    return n;
+  },
+
+  BaseConverter,
 };

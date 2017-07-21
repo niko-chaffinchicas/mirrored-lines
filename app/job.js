@@ -12,6 +12,7 @@ let canvas = new utils.EnhancedCanvas(1000, 1000);
 let strokeColors = [
   "rgba(230, 134, 140, 0.2)",
   "rgba(30, 80, 203, 0.3)",
+  "rgba(40, 230, 30, 0.2)",
 ];
 
 let envPath = path.join(__dirname, 'env.js');

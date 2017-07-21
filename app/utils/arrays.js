@@ -24,4 +24,13 @@ module.exports = {
     }
     return newArray;
   },
+
+  /**
+   * @function random
+   * @param {Array} arr - The original array
+   * @returns {*} A random child from the array
+   */
+  random: function(arr) {
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
 };

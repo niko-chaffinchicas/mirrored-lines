@@ -55,10 +55,18 @@ class MirroredLines {
    * Returns a an array of lines, from the starting lines to the ending,
    * jittered lines, with `n` number of lines inbetween.
    */
-  jitterPointsAndDistribute(points, maxDiff, n) {
-    let newPoints = this.jitterPoints(points, maxDiff);
-    let distrubutedLines = this.distrubuteLines(points, newPoints, n);
-    return [points, ...distrubutedLines.reverse(), newPoints];
+  jitterPointsAndDistribute(points, maxDiff, nTweens, nRepeat) {
+    let lines = [points];
+    let newPoints;
+    nTweens = Math.floor(nTweens);
+    nRepeat = Math.floor(nRepeat) || 1;
+    for (var i = 0; i < nRepeat; i++) {
+      newPoints = this.jitterPoints(points, maxDiff);
+      let distrubutedLines = this.distrubuteLines(points, newPoints, nTweens, nRepeat);
+      lines.push(...distrubutedLines.reverse(), newPoints);
+      points = newPoints;
+    }
+    return lines;
   }
 
   /**
